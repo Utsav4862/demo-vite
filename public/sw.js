@@ -1,12 +1,5 @@
 const CACHE_NAME = "version1";
-const urlsToCache = [
-'/index.html',
-'/src/main.jsx',
-// '/src/App.jsx',
-'/src/index.css',
-'/src/components/Product.jsx',
-'/manifest.json'
-
+const urlsToCache = ['/'
 ];
 const self = this;
 //install
