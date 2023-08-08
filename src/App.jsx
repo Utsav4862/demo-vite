@@ -115,7 +115,7 @@ function App() {
           ))}
         </div>
       </div>
-      {isMobile ? <InstallButton /> : window.innerWidth}
+      {isMobile ? <InstallButton width={width} /> : window.innerWidth}
     </>
   );
 }

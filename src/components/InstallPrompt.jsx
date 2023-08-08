@@ -3,7 +3,7 @@
 import { Box, Modal } from "@mui/material";
 import React, { useState, useEffect } from "react";
 
-const InstallButton = () => {
+const InstallButton = ({width}) => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [openFlag, setOpenFlag] = useState(true);
@@ -79,9 +79,10 @@ const InstallButton = () => {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: {
-      xs: 220,
+      xs: width - 75,
     },
     bgcolor: "background.paper",
+    borderColor:"transperent",
     borderRadius: 2,
     boxShadow: 24,
     p: 4,
@@ -103,7 +104,7 @@ const InstallButton = () => {
             </p>
             <br />
             <div>
-              <button onClick={ isUpdateAvailable? handleUpdate : handleInstall}>Yes</button>
+              <button style={{marginRight:5}} onClick={ isUpdateAvailable? handleUpdate : handleInstall}>Yes</button>
               <button onClick={() => setOpenFlag(false)}>No</button>
             </div>
           </Box>
