@@ -63,7 +63,7 @@ function App() {
 
   return (
     <>
-      {/* <div style={{ textAlign: "center", width: "100%" }}>
+      <div style={{ textAlign: "center", width: "100%" }}>
         <div
           style={{
             marginTop: 15,
@@ -114,7 +114,7 @@ function App() {
             </div>
           ))}
         </div>
-      </div> */}
+      </div>
       {isMobile ? <InstallButton /> : window.innerWidth}
     </>
   );

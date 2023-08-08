@@ -1,10 +1,13 @@
 // InstallButton.js
 
-import React, { useState, useEffect } from 'react';
+import { Box, Modal } from "@mui/material";
+import React, { useState, useEffect } from "react";
 
 const InstallButton = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [openFlag, setOpenFlag] = useState(true);
+  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (event) => {
@@ -15,23 +18,54 @@ const InstallButton = () => {
       setIsInstallable(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      window.location.reload();
+    });
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
     };
   }, []);
 
-  const handleInstall = () => {
+  useEffect(() => {
+    checkForUpdate();
+  }, []);
 
+  const checkForUpdate = () => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .getRegistration()
+        .then((registration) => {
+          if (registration && registration.waiting) {
+            setIsUpdateAvailable(true);
+          }
+        })
+        .catch((error) => {
+          console.error( error);
+        });
+    }
+  };
+
+  const handleUpdate = () => {
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+    }
+  };
+
+
+  const handleInstall = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
 
       deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('PWA installed successfully');
+        if (choiceResult.outcome === "accepted") {
+          console.log("installed successfully");
         } else {
-          console.log('User declined installation');
+          console.log("User declined installation");
         }
 
         setDeferredPrompt(null);
@@ -39,12 +73,41 @@ const InstallButton = () => {
     }
   };
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: {
+      xs: 220,
+    },
+    bgcolor: "background.paper",
+    borderRadius: 2,
+    boxShadow: 24,
+    p: 4,
+    padding: 2,
+  };
+
   return (
     <div>
-      {isInstallable && (
-        <button onClick={handleInstall}>
-          Install PWA
-        </button>
+      {(isInstallable || isUpdateAvailable) && (
+        <Modal
+          open={openFlag}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          //  style={{padding:0}}
+        >
+          <Box sx={style}>
+            <p style={{ margin: 0 }}>
+              Do you want to {isUpdateAvailable? "update":"install" } this Product app?
+            </p>
+            <br />
+            <div>
+              <button onClick={ isUpdateAvailable? handleUpdate : handleInstall}>Yes</button>
+              <button onClick={() => setOpenFlag(false)}>No</button>
+            </div>
+          </Box>
+        </Modal>
       )}
     </div>
   );
