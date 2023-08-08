@@ -54,6 +54,7 @@ const InstallButton = ({width}) => {
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
     }
+    setOpenFlag(false)
   };
 
 
@@ -71,6 +72,7 @@ const InstallButton = ({width}) => {
         setDeferredPrompt(null);
       });
     }
+    setOpenFlag(false)
   };
 
   const style = {
