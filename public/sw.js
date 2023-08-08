@@ -6,8 +6,7 @@ const self = this;
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("cache opend");
+    caches.open(CACHE_NAME).then((cache) => {;
 
       return cache.addAll(urlsToCache);
     })
@@ -16,8 +15,6 @@ self.addEventListener("install", (e) => {
 
 //listen
 self.addEventListener("fetch", (e) => {
-  console.log(e.request);
-  console.log(caches);
     if(!navigator.onLine){
         e.respondWith(
             caches.match(e.request).then((res)=>{

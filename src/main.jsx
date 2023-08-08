@@ -7,6 +7,7 @@ import store from './store/index.jsx'
 import { ApiProvider } from '@reduxjs/toolkit/dist/query/react'
 import { apiSlice } from './store/slices/apiSlice.jsx'
 import Product from './components/Product.jsx'
+import InstallButton from './components/InstallPrompt.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>

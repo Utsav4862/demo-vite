@@ -4,13 +4,19 @@ import viteLogo from "/vite.svg";
 // import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addData, deleteData } from "./store/slices/DataSlice";
-import { useGetAllProductsQuery, useGetProductBySearchQuery } from "./store/slices/apiSlice";
+import {
+  useGetAllProductsQuery,
+  useGetProductBySearchQuery,
+} from "./store/slices/apiSlice";
+import InstallButton from "./components/InstallPrompt";
 
 function App() {
+  const [width, setWidth] = useState(window.innerWidth);
+  const [isMobile, setIsMobile] = useState(false);
   const [inp, setInp] = useState();
   const [prod, setProd] = useState([]);
   const { data: initialProd } = useGetAllProductsQuery();
-  const {data: searchedProd} = useGetProductBySearchQuery(inp);
+  const { data: searchedProd } = useGetProductBySearchQuery(inp);
   // const dispatch = useDispatch();
 
   // const data = useSelector((state)=>{
@@ -25,11 +31,11 @@ function App() {
   //   dispatch(deleteData(index))
   // }
 
-  const searchProduct = () =>{
-    if(searchedProd){
-      setProd(searchedProd)
+  const searchProduct = () => {
+    if (searchedProd) {
+      setProd(searchedProd);
     }
-  }
+  };
 
   useEffect(() => {
     if (initialProd) {
@@ -37,9 +43,27 @@ function App() {
     }
   }, [initialProd]);
 
+  function handleWindowSizeChange() {
+    setWidth(window.innerWidth);
+  }
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowSizeChange);
+    return () => {
+      window.removeEventListener("resize", handleWindowSizeChange);
+    };
+  }, []);
+
+  useEffect(()=>{
+    if(width <= 768){
+      setIsMobile(true)
+    }else{
+      setIsMobile(false)
+    }
+  },[width])
+
   return (
     <>
-      <div style={{ textAlign: "center", width: "100%" }}>
+      {/* <div style={{ textAlign: "center", width: "100%" }}>
         <div
           style={{
             marginTop: 15,
@@ -90,7 +114,8 @@ function App() {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
+      {isMobile ? <InstallButton /> : window.innerWidth}
     </>
   );
 }
