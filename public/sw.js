@@ -1,5 +1,5 @@
 const CACHE_NAME = "version1";
-const urlsToCache = ['/',
+const urlsToCache = [
 '/index.html',
 '/src/main.jsx',
 // '/src/App.jsx',
