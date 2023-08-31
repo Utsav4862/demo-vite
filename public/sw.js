@@ -25,6 +25,17 @@ self.addEventListener("fetch", (e) => {
     }
 });
 
+self.addEventListener('push', function(e) {
+  const data = e.data.json();
+  console.log(data);
+  self.registration.showNotification(
+      data.title,
+      {
+        icon:'logo192.png',
+          body: data.body,
+      }
+  );
+})
 //activate
 // self.addEventListener("activate", (e) => {
 //     const cacheWhitelist = [];

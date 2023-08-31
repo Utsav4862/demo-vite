@@ -9,6 +9,9 @@ import {
   useGetProductBySearchQuery,
 } from "./store/slices/apiSlice";
 import InstallButton from "./components/InstallPrompt";
+import { getToken } from "firebase/messaging";
+import { messaging } from "./firebase";
+import axios from "axios";
 
 function App() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -17,20 +20,22 @@ function App() {
   const [prod, setProd] = useState([]);
   const { data: initialProd } = useGetAllProductsQuery();
   const { data: searchedProd } = useGetProductBySearchQuery(inp);
-  // const dispatch = useDispatch();
 
-  // const data = useSelector((state)=>{
-  //   return state.data
-  // })
+  async function reqPer(){
+    const per = await Notification.requestPermission()
+    if(per === "granted"){
+      const token = await getToken(messaging, {vapidKey:"BGpF8EDbvTCOF_S7hHWRuaAjnKtQ6_mJijz9GkiXLKmeP8iPjumY62ByicbDlbDS45VQ3aWfPU3Wu4XBtbEzFAY"})
+      console.log("adeasd");
+      console.log(token);
+        //send token here...
+    } 
+  }
 
-  // const add = ()=>{
-  //   dispatch(addData(inp));
-  // }
+  useEffect(()=>{
+    reqPer()
 
-  // const deleteItem = (index) =>{
-  //   dispatch(deleteData(index))
-  // }
-
+  },[])
+ 
   const searchProduct = () => {
     if (searchedProd) {
       setProd(searchedProd);
@@ -53,13 +58,13 @@ function App() {
     };
   }, []);
 
-  useEffect(()=>{
-    if(width <= 768){
-      setIsMobile(true)
-    }else{
-      setIsMobile(false)
+  useEffect(() => {
+    if (width <= 768) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
     }
-  },[width])
+  }, [width]);
 
   return (
     <>
@@ -115,7 +120,7 @@ function App() {
           ))}
         </div>
       </div>
-      {isMobile ? <InstallButton width={width} /> :""}
+      {isMobile ? <InstallButton width={width} /> : ""}
     </>
   );
 }

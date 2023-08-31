@@ -18,10 +18,7 @@ const InstallButton = ({width}) => {
       setIsInstallable(true);
     };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-      window.location.reload();
-    });
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
 
     return () => {
       window.removeEventListener(
@@ -31,31 +28,31 @@ const InstallButton = ({width}) => {
     };
   }, []);
 
-  useEffect(() => {
-    checkForUpdate();
-  }, []);
+  // useEffect(() => {
+  //   checkForUpdate();
+  // }, []);
 
-  const checkForUpdate = () => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .getRegistration()
-        .then((registration) => {
-          if (registration && registration.waiting) {
-            setIsUpdateAvailable(true);
-          }
-        })
-        .catch((error) => {
-          console.error( error);
-        });
-    }
-  };
+//   const checkForUpdate = () => {
+//     if ('serviceWorker' in navigator) {
+//       navigator.serviceWorker
+//         .getRegistration()
+//         .then((registration) => {
+//           if (registration && registration.waiting) {
+//             setIsUpdateAvailable(true);
+//           }
+//         })
+//         .catch((error) => {
+//           console.error( error);
+//         });
+//     }
+//   };
 
-  const handleUpdate = () => {
-    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
-    }
-    setOpenFlag(false)
-  };
+//   const handleUpdate = () => {
+//     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+//       navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+//     }
+//     setOpenFlag(false)
+//   };
 
 
   const handleInstall = () => {
